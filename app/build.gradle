@@ -1,0 +1,40 @@
+plugins {
+    id "com.android.application"
+}
+
+android {
+    namespace "com.mt5.replaystudio"
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.mt5.replaystudio"
+        minSdk 26
+        targetSdk 34
+        versionCode 7
+        versionName "1.6"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            // Debug key se sign: seedha install ho jata hai (Play Store ke liye apni key lagayein)
+            signingConfig signingConfigs.debug
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+// APK ka naam: MT5-Replay-Studio-v<version>-build<GitHub run number>.apk  (purani APKs se mix nahi hoti)
+def runNo = System.getenv("GITHUB_RUN_NUMBER") ?: "0"
+android.applicationVariants.all { variant ->
+    variant.outputs.all {
+        outputFileName = "MT5-Replay-Studio-v${variant.versionName}-build${runNo}.apk"
+    }
+}
+
+dependencies {
+    implementation "androidx.webkit:webkit:1.11.0"
+}
